@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use App\Entity\User\Mentor;
-use App\Repository\CertificateRepository;
+use App\Repository\CourseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CertificateRepository::class)]
-class Certificate
+#[ORM\Entity(repositoryClass: CourseRepository::class)]
+class Course
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,20 +15,13 @@ class Certificate
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $title = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $issueDate = null;
+    private ?\DateTimeImmutable $date = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $issuer = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
-
-    #[ORM\ManyToOne(inversedBy: 'certificates')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Mentor $mentor = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -42,38 +34,26 @@ class Certificate
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): static
+    public function setTitle(string $title): static
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getIssueDate(): ?\DateTimeImmutable
+    public function getDate(): ?\DateTimeImmutable
     {
-        return $this->issueDate;
+        return $this->date;
     }
 
-    public function setIssueDate(\DateTimeImmutable $issueDate): static
+    public function setDate(\DateTimeImmutable $date): static
     {
-        $this->issueDate = $issueDate;
-
-        return $this;
-    }
-
-    public function getIssuer(): ?string
-    {
-        return $this->issuer;
-    }
-
-    public function setIssuer(string $issuer): static
-    {
-        $this->issuer = $issuer;
+        $this->date = $date;
 
         return $this;
     }
@@ -86,18 +66,6 @@ class Certificate
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getMentor(): ?Mentor
-    {
-        return $this->mentor;
-    }
-
-    public function setMentor(?Mentor $mentor): static
-    {
-        $this->mentor = $mentor;
 
         return $this;
     }

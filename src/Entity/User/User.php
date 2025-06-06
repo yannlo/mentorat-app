@@ -13,9 +13,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\InheritanceType(value: 'JOINED')]
 #[ORM\DiscriminatorColumn(name: 'discr', type: 'string')]
 #[ORM\DiscriminatorMap([
-    'mentor' => Mentor::class,
-    'student' => Student::class,
-    'admin' => Admin::class,
+    'BaseClientUser' => BaseClientUser::class,
+    'manager' => Manager::class,
+    'moderator' => Moderator::class,
 ])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -47,6 +47,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     protected ?\DateTime $birthdate = null;
+
+    #[ORM\Column]
+    protected ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    protected ?\DateTimeImmutable $UpdatedAt = null;
 
     public function getId(): ?int
     {
@@ -153,6 +159,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBirthdate(\DateTime $birthdate): static
     {
         $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->UpdatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): static
+    {
+        $this->UpdatedAt = $UpdatedAt;
 
         return $this;
     }

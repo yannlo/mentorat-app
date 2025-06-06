@@ -8,7 +8,7 @@ use App\Repository\User\StudentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-class Student extends User
+class Student extends BaseClientUser
 {
 
     #[ORM\Column(length: 255)]
