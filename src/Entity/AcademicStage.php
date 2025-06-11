@@ -4,12 +4,13 @@ namespace App\Entity;
 
 use App\Entity\Enum\Level;
 use App\Entity\User\Mentor;
+use App\Entity\Util\AbstractTimestamp;
 use App\Repository\AcademicStageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AcademicStageRepository::class)]
-class AcademicStage
+class AcademicStage extends AbstractTimestamp
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -38,11 +39,6 @@ class AcademicStage
     #[ORM\JoinColumn(nullable: false)]
     private ?Mentor $mentor = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $UpdatedAt = null;
 
 
     public function getId(): ?int
@@ -130,30 +126,6 @@ class AcademicStage
     public function setMentor(?Mentor $mentor): static
     {
         $this->mentor = $mentor;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->UpdatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): static
-    {
-        $this->UpdatedAt = $UpdatedAt;
 
         return $this;
     }

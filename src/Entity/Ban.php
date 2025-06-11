@@ -4,12 +4,13 @@ namespace App\Entity;
 
 use App\Entity\User\BaseClientUser;
 use App\Entity\User\Moderator;
+use App\Entity\Util\AbstractTimestamp;
 use App\Repository\BanRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BanRepository::class)]
-class Ban
+class Ban extends AbstractTimestamp
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

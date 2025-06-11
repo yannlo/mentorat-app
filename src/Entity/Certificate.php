@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Entity\User\Mentor;
+use App\Entity\Util\AbstractTimestamp;
 use App\Repository\CertificateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CertificateRepository::class)]
-class Certificate
+class Certificate extends AbstractTimestamp
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,12 +31,6 @@ class Certificate
     #[ORM\ManyToOne(inversedBy: 'certificates')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Mentor $mentor = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -98,30 +93,6 @@ class Certificate
     public function setMentor(?Mentor $mentor): static
     {
         $this->mentor = $mentor;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

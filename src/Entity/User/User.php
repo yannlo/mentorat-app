@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use App\Entity\Util\AbstractTimestamp;
 use App\Repository\User\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     'manager' => Manager::class,
     'moderator' => Moderator::class,
 ])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends AbstractTimestamp implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -48,11 +49,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     protected ?\DateTime $birthdate = null;
 
-    #[ORM\Column]
-    protected ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    protected ?\DateTimeImmutable $UpdatedAt = null;
 
     public function getId(): ?int
     {
@@ -163,27 +159,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->UpdatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): static
-    {
-        $this->UpdatedAt = $UpdatedAt;
-
-        return $this;
-    }
 }
