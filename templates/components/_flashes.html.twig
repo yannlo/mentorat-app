@@ -1,0 +1,33 @@
+{% for type, messages in app.flashes %}
+	{% if type == 'success' %}
+		{% for message in messages %}
+			<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-200" role="alert">
+				<span class="font-medium">Success alert!</span>
+				{{ message }}
+			</div>
+		{% endfor %}
+
+	{% elseif type == 'error' %}
+		{% for message in messages %}
+			<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-200" role="alert">
+				<span class="font-medium">Danger alert!</span>
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% elseif type == 'warning' %}
+		{% for message in messages %}
+
+			<div class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-200" role="alert">
+				<span class="font-medium">Warning alert!</span>
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% elseif type == 'info' %}
+		{% for message in messages %}
+			<div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-200" role="alert">
+				<span class="font-medium">Info alert!</span>
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endfor %}

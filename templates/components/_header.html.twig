@@ -1,0 +1,26 @@
+<header class="top-0 left-0 right-0 z-50 fixed">
+	<nav class="bg-slate-800 text-white py-4 h-16">
+		<div class="container mx-auto flex items-center justify-between">
+			<a href="{{ path("app_home") }}" class="text-lg font-bold">Mentor APP</a>
+			<ul class="flex space-x-4">
+				<li>
+					<a href="{{ path("app_home") }}" class="text-gray-300 font-medium {% if app.current_route == " app_home" %} text-gray-50 {% else %} hover:text-gray-50 {% endif %} ">Accueil</a>
+				</li>
+				<li>
+					<a href="{{ path("app_mentoring") }}" class="text-gray-300 font-medium {% if app.current_route starts with 'app_mentoring' %} text-gray-50 {% else %} hover:text-gray-50  {% endif %}">Devenir mentor</a>
+				</li>
+				{# <li>
+									<a href="{{ path("app_booking_index") }}" class="text-gray-300 font-medium {% if app.current_route starts with 'app_booking' %} text-gray-50 {% else %} hover:text-gray-50  {% endif %}">Disponibilités</a>
+								</li>
+								<li>
+									<a href="#" class="text-gray-300 font-medium {% if app.current_route == "" %} text-gray-50 {% else %} hover:text-gray-50  {% endif %}">Rendez-vous</a>
+								</li> #}
+			</ul>
+			{% if app.user %}
+				<a href="{{ path("app_logout") }}" class="text-gray-300 font-medium hover:text-gray-50">Déconnexion</a>
+			{% else %}
+				<a href="{{ path("app_login") }}" class="text-gray-300 font-medium hover:text-gray-50">Connexion</a>
+			{% endif %}
+		</div>
+	</nav>
+</header>
