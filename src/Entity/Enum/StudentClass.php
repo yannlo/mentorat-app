@@ -48,5 +48,4 @@ enum StudentClass: string
             self::FOURTH_YEAR, self::FIFTH_YEAR, self::SIXTH_YEAR, self::SEVENTH_YEAR_AND_MORE => Level::GRADUATE,
         };
     }
-
 }

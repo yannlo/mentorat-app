@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
     'student' => Student::class,
     'mentor' => Mentor::class,
 ])]
-class BaseClientUser extends User
+abstract class BaseClientUser extends User
 {
     #[ORM\OneToOne(mappedBy: 'baseClientUser', cascade: ['persist', 'remove'])]
     private ?Ban $ban = null;

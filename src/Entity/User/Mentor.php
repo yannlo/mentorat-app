@@ -15,13 +15,13 @@ class Mentor extends BaseClientUser
     /**
      * @var Collection<int, AcademicStage>
      */
-    #[ORM\OneToMany(targetEntity: AcademicStage::class, mappedBy: 'mentor', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AcademicStage::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ['persist'])]
     private Collection $academicStages;
 
     /**
      * @var Collection<int, Certificate>
      */
-    #[ORM\OneToMany(targetEntity: Certificate::class, mappedBy: 'mentor', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Certificate::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ['persist'])]
     private Collection $certificates;
 
     public function __construct()

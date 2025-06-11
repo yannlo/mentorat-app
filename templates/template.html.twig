@@ -3,14 +3,10 @@
 
 {% block body %}
 
-	{% include "components/_header.html.twig" %}
-
-	<main class="w-full min-h-screen pt-16 bg-slate-100">
-		{% block content %}{% endblock %}
-	</main>
+	{% block main %}{% endblock %}
 
 	<footer class="bg-slate-900 text-gray-400 w-full text-center p-1">
-		<p class="text-sm font-semibold">Copyright 2025 | Espace Marie-Merveille</p>
+		<p class="text-sm font-semibold">Copyright 2025 | MentorAPP</p>
 	</footer>
 
 {% endblock %}

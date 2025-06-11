@@ -14,10 +14,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\InheritanceType(value: 'JOINED')]
 #[ORM\DiscriminatorColumn(name: 'discr', type: 'string')]
 #[ORM\DiscriminatorMap([
-    'BaseClientUser' => BaseClientUser::class,
     'manager' => Manager::class,
     'moderator' => Moderator::class,
+    'student' => Student::class,
+    'mentor' => Mentor::class,
 ])]
+
+
 class User extends AbstractTimestamp implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -46,8 +49,8 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     #[ORM\Column(length: 255)]
     protected ?string $lastname = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    protected ?\DateTime $birthdate = null;
+    #[ORM\Column]
+    protected ?\DateTimeImmutable $birthdate = null;
 
 
     public function getId(): ?int
@@ -152,11 +155,10 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
         return $this->birthdate;
     }
 
-    public function setBirthdate(\DateTime $birthdate): static
+    public function setBirthdate(\DateTimeImmutable $birthdate): static
     {
         $this->birthdate = $birthdate;
 
         return $this;
     }
-
 }

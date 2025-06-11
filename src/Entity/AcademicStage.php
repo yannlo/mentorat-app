@@ -21,9 +21,9 @@ class AcademicStage extends AbstractTimestamp
     private ?string $schoolName = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTime $startYear = null;
+    private ?\DateTimeImmutable $startYear = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $endYear = null;
 
     #[ORM\Column(enumType: Level::class)]
@@ -63,7 +63,7 @@ class AcademicStage extends AbstractTimestamp
         return $this->startYear;
     }
 
-    public function setStartYear(\DateTime $startYear): static
+    public function setStartYear(\DateTimeImmutable $startYear): static
     {
         $this->startYear = $startYear;
 
@@ -75,7 +75,7 @@ class AcademicStage extends AbstractTimestamp
         return $this->endYear;
     }
 
-    public function setEndYear(\DateTimeImmutable $endYear): static
+    public function setEndYear(?\DateTimeImmutable $endYear): static
     {
         $this->endYear = $endYear;
 
@@ -129,5 +129,4 @@ class AcademicStage extends AbstractTimestamp
 
         return $this;
     }
-
 }

@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
 class Student extends BaseClientUser
 {
-
     #[ORM\Column(length: 255)]
     private ?string $schoolName = null;
 
