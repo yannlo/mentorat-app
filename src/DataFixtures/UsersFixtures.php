@@ -37,8 +37,8 @@ class UsersFixtures extends Fixture
             ->addAcademicStage(
                 (new \App\Entity\AcademicStage())
                     ->setSchoolName('Example High School')
-                    ->setStartYear(new \DateTimeImmutable('2017-01-01'))
-                    ->setEndYear(new \DateTimeImmutable('2019-01-01'))
+                    ->setStartYear('2017')
+                    ->setEndYear('2019')
                     ->setLevel(\App\Entity\Enum\Level::HIGH_SCHOOL)
                     ->setDegreeName('High School Diploma')
                     ->setDescription('This is an example academic stage for high school.')
@@ -48,8 +48,8 @@ class UsersFixtures extends Fixture
             ->addAcademicStage(
                 (new \App\Entity\AcademicStage())
                     ->setSchoolName('Example University')
-                    ->setStartYear(new \DateTimeImmutable('2020-01-01'))
-                    ->setEndYear(new \DateTimeImmutable('2024-01-01'))
+                    ->setStartYear('2020')
+                    ->setEndYear('2024')
                     ->setLevel(\App\Entity\Enum\Level::UNDERGRADUATE)
                     ->setDegreeName('Bachelor of Science')
                     ->setDescription('This is an example academic stage for university.')

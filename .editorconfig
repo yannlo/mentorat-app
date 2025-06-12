@@ -10,6 +10,10 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+
+[*.{js,ts,jsx,tsx,json}]
+indent_size = 2
+
 [{compose.yaml,compose.*.yaml}]
 indent_size = 2
 

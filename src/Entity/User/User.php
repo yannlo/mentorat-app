@@ -4,10 +4,13 @@ namespace App\Entity\User;
 
 use App\Entity\Util\AbstractTimestamp;
 use App\Repository\User\UserRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -19,6 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     'student' => Student::class,
     'mentor' => Mentor::class,
 ])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 
 
 class User extends AbstractTimestamp implements UserInterface, PasswordAuthenticatedUserInterface
@@ -29,6 +33,12 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     protected ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: 'Email cannot be blank')]
+    #[Assert\Email(message: 'The email "{{ value }}" is not a valid email.')]
+    #[Assert\Length(
+        max: 180,
+        maxMessage: 'Email cannot be longer than {{ limit }} characters'
+    )]
     protected ?string $email = null;
 
     /**
@@ -44,13 +54,35 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     protected ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'First name cannot be blank')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'First name cannot be longer than {{ limit }} characters'
+    )]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Last name cannot be blank')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Last name cannot be longer than {{ limit }} characters'
+    )]
     protected ?string $lastname = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Birthdate cannot be blank')]
+    #[Assert\LessThanOrEqual(
+        value: '-13 years',
+        message: 'You must be at least 13 years old to register.'
+    )]
+    #[Assert\GreaterThanOrEqual(
+        value: '-120 years',
+        message: 'Birthdate cannot be more than 120 years ago.'
+    )]
     protected ?\DateTimeImmutable $birthdate = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
 
 
     public function getId(): ?int
@@ -158,6 +190,18 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     public function setBirthdate(\DateTimeImmutable $birthdate): static
     {
         $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

@@ -1,0 +1,51 @@
+{{ form_start(form) }}
+
+{{ form_errors(form) }}
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
+	<div class="mb-4">
+		{{ form_row(form.firstname) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.lastname) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.birthdate) }}
+	</div>
+</div>
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations de connexion</h2>
+	<div class="mb-4">
+		{{ form_row(form.email) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.plainPassword) }}
+	</div>
+</div>
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations sur le niveau</h2>
+	<div class="mb-4">
+		{{ form_row(form.schoolName) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.level) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.classname) }}
+	</div>
+</div>
+
+
+{{ form_widget(form.agreeTerms) }}
+
+<div class="mt-10 mx-auto w-min">
+	<button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600">
+		Confirm
+	</button>
+</div>
+{{ form_rest(form) }}
+
+{{ form_end(form) }}

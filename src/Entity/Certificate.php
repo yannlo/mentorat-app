@@ -7,6 +7,7 @@ use App\Entity\Util\AbstractTimestamp;
 use App\Repository\CertificateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CertificateRepository::class)]
 class Certificate extends AbstractTimestamp
@@ -17,15 +18,34 @@ class Certificate extends AbstractTimestamp
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Certificate name cannot be blank')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Certificate name cannot be longer than {{ limit }} characters'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Assert\NotBlank(message: 'Issue date cannot be blank')]
+    #[Assert\LessThanOrEqual(
+        value: 'today',
+        message: 'Issue date cannot be in the future.'
+    )]
     private ?\DateTimeImmutable $issueDate = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Issuer cannot be blank')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Issuer name cannot be longer than {{ limit }} characters'
+    )]
     private ?string $issuer = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        max: 1000,
+        maxMessage: 'Description cannot be longer than {{ limit }} characters'
+    )]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'certificates')]

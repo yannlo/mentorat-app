@@ -8,6 +8,7 @@ use App\Repository\User\MentorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MentorRepository::class)]
 class Mentor extends BaseClientUser
@@ -16,12 +17,18 @@ class Mentor extends BaseClientUser
      * @var Collection<int, AcademicStage>
      */
     #[ORM\OneToMany(targetEntity: AcademicStage::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ['persist'])]
+    #[Assert\Valid()]
+    #[Assert\Count(
+        min: 1,
+        minMessage: 'At least one academic stage is required.'
+    )]
     private Collection $academicStages;
 
     /**
      * @var Collection<int, Certificate>
      */
     #[ORM\OneToMany(targetEntity: Certificate::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ['persist'])]
+    #[Assert\Valid]
     private Collection $certificates;
 
     public function __construct()

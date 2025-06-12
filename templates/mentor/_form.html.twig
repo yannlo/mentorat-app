@@ -1,0 +1,59 @@
+{{ form_start(form) }}
+
+{% if form.vars.errors|length > 0 %}
+	<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-200" role="alert">
+		<p class="font-medium">Please fix the following errors:</p>
+		<ul class="list-disc pl-5">
+			{% for error in form.vars.errors %}
+			{{ dump(error.cause.propertyPath
+			) }}
+				<li><span class="font-bold">{{form.vars.name}}: </span>{{ error.message }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+ {% endif %}
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations Personnelles</h2>
+	<div class="mb-4">
+		{{ form_row(form.firstname) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.lastname) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.birthdate) }}
+	</div>
+</div>
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations de connexion</h2>
+	<div class="mb-4">
+		{{ form_row(form.email) }}
+	</div>
+	<div class="mb-4">
+		{{ form_row(form.plainPassword) }}
+	</div>
+</div>
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations sur le parcours academic</h2>
+	{{ form_row(form.academicStages) }}
+</div>
+
+<div class="mb-8">
+	<h2 class="text-xl font-semibold mb-2">Informations sur les certificates</h2>
+	{{ form_row(form.certificates) }}
+</div>
+
+
+{{ form_widget(form.agreeTerms) }}
+
+<div class="mt-10 mx-auto w-min">
+	<button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600">
+		Confirm
+	</button>
+</div>
+{{ form_rest(form) }}
+
+{{ form_end(form) }}
