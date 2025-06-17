@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Enum\Level;
+use App\Entity\Enums\Level;
 use App\Entity\AcademicStage;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -17,12 +17,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AcademicStageType extends AbstractType
 {
-
-    use \App\Form\Trait\AttachTimestampTrait;
+    use \App\Form\Traits\AttachTimestampTrait;
 
     public function __construct(
         private readonly string $classname = AcademicStage::class,
-    ) {}
+    ) {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

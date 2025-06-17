@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Entity\User;
+namespace App\Entity\Users;
 
-use App\Entity\Util\AbstractTimestamp;
+use App\Entity\Utils\AbstractTimestamp;
 use App\Repository\User\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -22,9 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'student' => Student::class,
     'mentor' => Mentor::class,
 ])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-
-
+#[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé par un autre compte.')]
 class User extends AbstractTimestamp implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -82,8 +78,7 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     protected ?\DateTimeImmutable $birthdate = null;
 
     #[ORM\Column]
-    private bool $isVerified = false;
-
+    protected bool $isVerified = false;
 
     public function getId(): ?int
     {
@@ -180,6 +175,11 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
         $this->lastname = $lastname;
 
         return $this;
+    }
+
+    public function getFullname(): string
+    {
+        return ( $this->lastname . ' ' . $this->firstname);
     }
 
     public function getBirthdate(): ?\DateTime

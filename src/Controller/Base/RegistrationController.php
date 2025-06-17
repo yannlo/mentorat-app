@@ -2,10 +2,10 @@
 
 namespace App\Controller\Base;
 
-use App\Entity\User\BaseClientUser;
-use App\Entity\User\Mentor;
-use App\Entity\User\Student;
-use App\Entity\User\User;
+use App\Entity\Users\BaseClientUser;
+use App\Entity\Users\Mentor;
+use App\Entity\Users\Student;
+use App\Entity\Users\User;
 use App\Form\RegistrationForm;
 use App\Form\User\MentorType;
 use App\Form\User\StudentForm;
@@ -28,12 +28,18 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route('/register', name: 'app_register_')]
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier) {}
+    public function __construct(private EmailVerifier $emailVerifier)
+    {
+    }
 
 
     #[Route('-student', name: 'student')]
-    public function registerStudent(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
+    public function registerStudent(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        Security $security,
+        EntityManagerInterface $entityManager
+    ): Response {
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
@@ -44,15 +50,15 @@ class RegistrationController extends AbstractController
 
             // encode the plain password
             $student->setPassword($userPasswordHasher->hashPassword($student, $plainPassword));
+            $student->setRoles(["ROLE_STUDENT"]);
 
             $entityManager->persist($student);
             $entityManager->flush();
 
-            $student->setRoles(["ROLE_STUDENT"]);
             if ($this->getParameter("kernel.environment") === 'dev') {
                 $student->setIsVerified(true);
             } else {
-                $this->SendEmail($student, 'registration/confirmation_email.html.twig');
+                $this->sendEmail($student, 'registration/confirmation_email.html.twig');
             }
 
             $this->addFlash('success', 'Student registered successfully. You can now log in.');
@@ -64,8 +70,12 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('-mentor', name: 'mentor')]
-    public function registerMentor(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
+    public function registerMentor(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        Security $security,
+        EntityManagerInterface $entityManager
+    ): Response {
         $mentor = new Mentor();
         $form = $this->createForm(MentorType::class, $mentor);
         $form->handleRequest($request);
@@ -84,7 +94,7 @@ class RegistrationController extends AbstractController
             if ($this->getParameter("kernel.environment") === 'dev') {
                 $mentor->setIsVerified(true);
             } else {
-                $this->SendEmail($mentor, 'registration/confirmation_email.html.twig');
+                $this->sendEmail($mentor, 'registration/confirmation_email.html.twig');
             }
 
             $this->addFlash('success', 'Mentor registered successfully. You can now log in.');
@@ -96,7 +106,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    private function SendEmail(BaseClientUser $user, string $template): void
+    private function sendEmail(BaseClientUser $user, string $template): void
     {
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation(
@@ -111,8 +121,11 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
-    {
+    public function verifyUserEmail(
+        Request $request,
+        TranslatorInterface $translator,
+        UserRepository $userRepository
+    ): Response {
         $id = $request->query->get('id');
 
         if (null === $id) {

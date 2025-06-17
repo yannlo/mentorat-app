@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\Enum\Level;
-use App\Entity\User\Mentor;
-use App\Entity\Util\AbstractTimestamp;
+use App\Entity\Enums\Level;
+use App\Entity\Users\Mentor;
+use App\Entity\Utils\AbstractTimestamp;
 use App\Repository\AcademicStageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -53,7 +53,7 @@ class AcademicStage extends AbstractTimestamp
         value: 'today',
         message: 'End year cannot be in the future.'
     )]
-    
+
     #[Assert\Range(
         min: 1900,
         max: 2100,

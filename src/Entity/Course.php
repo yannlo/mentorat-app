@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Util\AbstractTimestamp;
+use App\Entity\Utils\AbstractTimestamp;
 use App\Repository\CourseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

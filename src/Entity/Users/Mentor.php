@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\User;
+namespace App\Entity\Users;
 
 use App\Entity\AcademicStage;
 use App\Entity\Certificate;

@@ -15,12 +15,12 @@ use Symfony\Component\Validator\Constraints\Date;
 
 class CertificateType extends AbstractType
 {
-
-    use \App\Form\Trait\AttachTimestampTrait;
+    use \App\Form\Traits\AttachTimestampTrait;
 
     public function __construct(
         private readonly string $classname = Certificate::class,
-    ) {}
+    ) {
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -42,8 +42,6 @@ class CertificateType extends AbstractType
             ])
             ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimetamps(...))
         ;
-
-        
     }
 
     public function configureOptions(OptionsResolver $resolver): void

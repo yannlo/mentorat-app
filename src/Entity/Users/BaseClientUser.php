@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Entity\User;
+namespace App\Entity\Users;
 
 use App\Entity\Ban;
-use App\Repository\User\BaseClientUserRepository;
+use App\Entity\Traits\HasPublicIdTrait;
+use App\Entity\Users\User;
+use App\Entity\Users\Mentor;
+use App\Entity\Users\Student;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\User\BaseClientUserRepository;
 
 #[ORM\Entity(repositoryClass: BaseClientUserRepository::class)]
 #[ORM\InheritanceType(value: 'JOINED')]
@@ -13,8 +17,11 @@ use Doctrine\ORM\Mapping as ORM;
     'student' => Student::class,
     'mentor' => Mentor::class,
 ])]
+#[ORM\HasLifecycleCallbacks]
 abstract class BaseClientUser extends User
 {
+    use HasPublicIdTrait;
+
     #[ORM\OneToOne(mappedBy: 'baseClientUser', cascade: ['persist', 'remove'])]
     private ?Ban $ban = null;
 

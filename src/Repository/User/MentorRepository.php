@@ -2,7 +2,7 @@
 
 namespace App\Repository\User;
 
-use App\Entity\User\Mentor;
+use App\Entity\Users\Mentor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\User\BaseClientUser;
-use App\Entity\User\Moderator;
-use App\Entity\Util\AbstractTimestamp;
+use App\Entity\Users\BaseClientUser;
+use App\Entity\Users\Moderator;
+use App\Entity\Utils\AbstractTimestamp;
 use App\Repository\BanRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

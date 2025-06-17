@@ -2,7 +2,7 @@
 
 namespace App\Repository\User;
 
-use App\Entity\User\Moderator;
+use App\Entity\Users\Moderator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

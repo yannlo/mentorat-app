@@ -1,0 +1,11 @@
+{% extends 'mentor/layout.html.twig' %}
+
+{% block title %} {{ student.fullname }} - mentor{% endblock %}
+
+{% block content %}
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-4">Student profile - mentor</h1>
+            <h2 class="text-xl font-semibold mb-2">{{ student.fullname }}!</h2>
+    </div>
+
+{% endblock %}

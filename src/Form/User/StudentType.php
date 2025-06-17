@@ -2,9 +2,9 @@
 
 namespace App\Form\User;
 
-use App\Entity\Enum\Level;
-use App\Entity\User\Student;
-use App\Entity\Enum\StudentClass;
+use App\Entity\Enums\Level;
+use App\Entity\Users\Student;
+use App\Entity\Enums\StudentClass;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,11 +22,12 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class StudentType extends AbstractType
 {
-    use \App\Form\Trait\AttachTimestampTrait;
+    use \App\Form\Traits\AttachTimestampTrait;
 
     public function __construct(
         private readonly string $classname = Student::class,
-    ) {}
+    ) {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

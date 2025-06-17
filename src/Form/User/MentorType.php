@@ -2,7 +2,7 @@
 
 namespace App\Form\User;
 
-use App\Entity\User\Mentor;
+use App\Entity\Users\Mentor;
 use App\Form\CertificateType;
 use App\Form\AcademicStageType;
 use Symfony\Component\Form\FormEvent;
@@ -23,10 +23,12 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class MentorType extends AbstractType
 {
-    use \App\Form\Trait\AttachTimestampTrait;
+    use \App\Form\Traits\AttachTimestampTrait;
+
     public function __construct(
         private readonly string $classname = Mentor::class,
-    ) {}
+    ) {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\User\Mentor;
-use App\Entity\Util\AbstractTimestamp;
+use App\Entity\Users\Mentor;
+use App\Entity\Utils\AbstractTimestamp;
 use App\Repository\CertificateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

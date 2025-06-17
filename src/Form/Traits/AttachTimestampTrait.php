@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form\Trait;
+namespace App\Form\Traits;
 
-use App\Entity\Util\AbstractTimestamp;
+use App\Entity\Utils\AbstractTimestamp;
 use Symfony\Component\Form\FormEvent;
 
 trait AttachTimestampTrait

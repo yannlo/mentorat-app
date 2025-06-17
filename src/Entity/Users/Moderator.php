@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\User;
+namespace App\Entity\Users;
 
 use App\Entity\Ban;
 use App\Repository\User\ModeratorRepository;
