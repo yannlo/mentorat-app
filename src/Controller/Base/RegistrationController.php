@@ -2,35 +2,33 @@
 
 namespace App\Controller\Base;
 
-use App\Entity\Users\BaseClientUser;
-use App\Entity\Users\Mentor;
-use App\Entity\Users\Student;
+use App\Entity\Enums\MentorRegisterStep;
 use App\Entity\Users\User;
-use App\Form\RegistrationForm;
-use App\Form\User\MentorType;
-use App\Form\User\StudentForm;
-use App\Form\User\StudentType;
-use App\Repository\User\UserRepository;
-use App\Security\AppAuthenticator;
+use App\Entity\Users\Mentor\Mentor;
+use App\Entity\Users\Student;
+use App\Form\Users\StudentType;
 use App\Security\EmailVerifier;
+use App\Security\AppAuthenticator;
+use Symfony\Component\Mime\Address;
+use App\Entity\Users\BaseClientUser;
+use App\Form\Users\Mentor\AboutForm as MentorAboutForm;
+use App\Repository\Users\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 #[Route('/register', name: 'app_register_')]
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier)
-    {
-    }
+    public function __construct(private EmailVerifier $emailVerifier) {}
 
 
     #[Route('-student', name: 'student')]
@@ -40,6 +38,13 @@ class RegistrationController extends AbstractController
         Security $security,
         EntityManagerInterface $entityManager
     ): Response {
+
+        if (!is_null($request->getUser())) {
+            return new RedirectResponse(
+                $this->generateUrl('app_client_dashboard')
+            );
+        }
+
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
@@ -76,8 +81,15 @@ class RegistrationController extends AbstractController
         Security $security,
         EntityManagerInterface $entityManager
     ): Response {
+
+        if (!is_null($request->getUser())) {
+            return new RedirectResponse(
+                $this->generateUrl('app_client_dashboard')
+            );
+        }
+
         $mentor = new Mentor();
-        $form = $this->createForm(MentorType::class, $mentor);
+        $form = $this->createForm(MentorAboutForm::class, $mentor);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

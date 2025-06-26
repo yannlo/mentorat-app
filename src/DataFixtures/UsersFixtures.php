@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Enums\StudentClass;
-use App\Entity\Users\Mentor;
+use App\Entity\Users\Mentor\Mentor;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Attribute\When;
@@ -35,40 +35,41 @@ class UsersFixtures extends Fixture
             ->setBirthdate(new \DateTimeImmutable('2000-01-01'))
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
-            ->addAcademicStage(
-                (new \App\Entity\AcademicStage())
-                    ->setSchoolName('Example High School')
-                    ->setStartYear('2017')
-                    ->setEndYear('2019')
-                    ->setLevel(\App\Entity\Enums\Level::HIGH_SCHOOL)
-                    ->setDegreeName('High School Diploma')
-                    ->setDescription('This is an example academic stage for high school.')
-                    ->setCreatedAt(new \DateTimeImmutable())
-                    ->setUpdatedAt(new \DateTimeImmutable())
-            )
-            ->addAcademicStage(
-                (new \App\Entity\AcademicStage())
-                    ->setSchoolName('Example University')
-                    ->setStartYear('2020')
-                    ->setEndYear('2024')
-                    ->setLevel(\App\Entity\Enums\Level::UNDERGRADUATE)
-                    ->setDegreeName('Bachelor of Science')
-                    ->setDescription('This is an example academic stage for university.')
-                    ->setCreatedAt(new \DateTimeImmutable())
-                    ->setUpdatedAt(new \DateTimeImmutable())
-            )
-            ->addCertificate((new \App\Entity\Certificate())->setName('Example Certificate')
-                ->setDescription('This is an example certificate.')
-                ->setIssueDate(new \DateTimeImmutable('2024-01-01'))
-                ->setIssuer('Example Issuer')
-                ->setCreatedAt(new \DateTimeImmutable())
-                ->setUpdatedAt(new \DateTimeImmutable()))
-            ->addCertificate((new \App\Entity\Certificate())->setName('Another Certificate')
-                ->setDescription('This is another example certificate.')
-                ->setIssueDate(new \DateTimeImmutable('2024-02-01'))
-                ->setIssuer('Another Issuer')
-                ->setCreatedAt(new \DateTimeImmutable())
-                ->setUpdatedAt(new \DateTimeImmutable()));
+            // ->addAcademicStage(
+            //     (new \App\Entity\Users\Mentor\AcademicStage())
+            //         ->setSchoolName('Example High School')
+            //         ->setStartYear('2017')
+            //         ->setEndYear('2019')
+            //         ->setLevel(\App\Entity\Enums\Level::HIGH_SCHOOL)
+            //         ->setDegreeName('High School Diploma')
+            //         ->setDescription('This is an example academic stage for high school.')
+            //         ->setCreatedAt(new \DateTimeImmutable())
+            //         ->setUpdatedAt(new \DateTimeImmutable())
+            // )
+            // ->addAcademicStage(
+            //     (new \App\Entity\Users\Mentor\AcademicStage())
+            //         ->setSchoolName('Example University')
+            //         ->setStartYear('2020')
+            //         ->setEndYear('2024')
+            //         ->setLevel(\App\Entity\Enums\Level::UNDERGRADUATE)
+            //         ->setDegreeName('Bachelor of Science')
+            //         ->setDescription('This is an example academic stage for university.')
+            //         ->setCreatedAt(new \DateTimeImmutable())
+            //         ->setUpdatedAt(new \DateTimeImmutable())
+            // )
+            // ->addCertificate((new \App\Entity\Users\Mentor\Certificate())->setName('Example Certificate')
+            //     ->setDescription('This is an example certificate.')
+            //     ->setIssueDate(new \DateTimeImmutable('2024-01-01'))
+            //     ->setIssuer('Example Issuer')
+            //     ->setCreatedAt(new \DateTimeImmutable())
+            //     ->setUpdatedAt(new \DateTimeImmutable()))
+            // ->addCertificate((new \App\Entity\Users\Mentor\Certificate())->setName('Another Certificate')
+            //     ->setDescription('This is another example certificate.')
+            //     ->setIssueDate(new \DateTimeImmutable('2024-02-01'))
+            //     ->setIssuer('Another Issuer')
+            //     ->setCreatedAt(new \DateTimeImmutable())
+            //     ->setUpdatedAt(new \DateTimeImmutable()))
+        ;
 
         $student = new \App\Entity\Users\Student();
         $student->setEmail('student@example.com')

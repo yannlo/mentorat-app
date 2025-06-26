@@ -2,7 +2,10 @@
 
 namespace App\Controller\Client;
 
-use App\Repository\User\StudentRepository;
+use App\Entity\Users\Mentor\Mentor;
+use App\Entity\Enums\MentorRegisterStep;
+use App\Repository\Users\StudentRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -13,8 +16,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class MainController extends AbstractController
 {
     #[Route('/dashboard', name: 'dashboard')]
-    public function dashboard(StudentRepository $studentRepository): Response
+    public function dashboard(Request $request, StudentRepository $studentRepository): Response
     {
+        $user = $request->getUser();
+        if (
+            ($user instanceof Mentor)
+            && $user->getRegisterStep() !== MentorRegisterStep::COMPLETED
+        ) {
+            return $this->redirectToRoute('app_mentor_register', ["step" => $user->getRegisterStep()->getNext()->value]);
+        }
 
         if ($this->isGranted('ROLE_STUDENT')) {
             return $this->render('student/main/index.html.twig', []);
@@ -22,7 +32,7 @@ final class MainController extends AbstractController
 
 
         return $this->render('mentor/main/dashboard.html.twig', [
-            "students" => $studentRepository -> findAll()
+            "students" => $studentRepository->findAll()
         ]);
     }
 }

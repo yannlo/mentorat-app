@@ -3,7 +3,7 @@
 namespace App\Entity\Users;
 
 use App\Entity\Ban;
-use App\Repository\User\ModeratorRepository;
+use App\Repository\Users\ModeratorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

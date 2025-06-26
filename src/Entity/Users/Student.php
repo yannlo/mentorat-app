@@ -5,7 +5,7 @@ namespace App\Entity\Users;
 use App\Entity\Enums\Level;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Enums\StudentClass;
-use App\Repository\User\StudentRepository;
+use App\Repository\Users\StudentRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]

@@ -3,7 +3,7 @@
 namespace App\Tests\Resolver;
 
 use App\Entity\Users\Student;
-use App\Repository\User\StudentRepository;
+use App\Repository\Users\StudentRepository;
 use App\Resolver\PublicIdValueResolver;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;

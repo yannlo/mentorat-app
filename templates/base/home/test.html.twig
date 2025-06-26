@@ -1,0 +1,15 @@
+{% extends 'base/layout.html.twig' %}
+
+{% block title %}Index page
+{% endblock %}
+
+{% block content %}
+	<h1 class="text-2xl">Page de test</h1>
+
+	<div class="w-full max-w-4xl my-20 px-8">
+		{{ form_start(form) }}
+			{{ form_row(form) }}
+		{{ form_end(form) }}
+	</div>
+
+{% endblock %}

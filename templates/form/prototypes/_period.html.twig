@@ -1,0 +1,8 @@
+{% block period_row %}
+	<div class="flex flex-row items-center justify-between">
+		{{ form_row(form) }}
+		{% if canBeDelete %}
+			<button type="button" data-action-remove class="border border-red-500 text-red-500 hover:bg-red-50 rounded px-3 py-1.5 text-sm h-min">Supprimer</button>
+		{% endif %}
+	</div>
+{% endblock %}

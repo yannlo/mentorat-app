@@ -2,13 +2,14 @@
 
 namespace App\Entity\Users;
 
-use App\Entity\Utils\AbstractTimestamp;
-use App\Repository\User\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Users\Mentor\Mentor;
+use App\Entity\Utils\AbstractTimestamp;
+use App\Repository\Users\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -182,7 +183,7 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
         return ( $this->lastname . ' ' . $this->firstname);
     }
 
-    public function getBirthdate(): ?\DateTime
+    public function getBirthdate(): ?\DateTimeImmutable
     {
         return $this->birthdate;
     }

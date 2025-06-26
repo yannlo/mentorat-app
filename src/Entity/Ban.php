@@ -68,4 +68,16 @@ class Ban extends AbstractTimestamp
 
         return $this;
     }
+
+    public function getBaseClientUser(): ?BaseClientUser
+    {
+        return $this->baseClientUser;
+    }
+
+    public function setBaseClientUser(BaseClientUser $baseClientUser): static
+    {
+        $this->baseClientUser = $baseClientUser;
+
+        return $this;
+    }
 }

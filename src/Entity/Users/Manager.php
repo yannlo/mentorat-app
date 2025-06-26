@@ -2,7 +2,7 @@
 
 namespace App\Entity\Users;
 
-use App\Repository\User\ManagerRepository;
+use App\Repository\Users\ManagerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ManagerRepository::class)]

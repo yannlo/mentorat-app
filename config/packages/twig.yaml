@@ -2,7 +2,9 @@ twig:
     file_name_pattern: '*.twig'
     date:
         format: 'd/m/Y'
-    form_themes: [ 'form/form_div_layout.html.twig']
+    form_themes: 
+        - '@TalesFromADevFlowbite/form/default.html.twig'
+        - 'form/_custom_form.html.twig'
 when@test:
     twig:
         strict_variables: true

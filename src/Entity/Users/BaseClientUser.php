@@ -5,10 +5,10 @@ namespace App\Entity\Users;
 use App\Entity\Ban;
 use App\Entity\Traits\HasPublicIdTrait;
 use App\Entity\Users\User;
-use App\Entity\Users\Mentor;
+use App\Entity\Users\Mentor\Mentor;
 use App\Entity\Users\Student;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\User\BaseClientUserRepository;
+use App\Repository\Users\BaseClientUserRepository;
 
 #[ORM\Entity(repositoryClass: BaseClientUserRepository::class)]
 #[ORM\InheritanceType(value: 'JOINED')]

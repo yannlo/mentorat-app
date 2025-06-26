@@ -16,7 +16,7 @@
                         <span class="font-semibold text-gray-800">{{ student.fullname }}</span>
                         <span class="ml-2 text-sm text-gray-500">{{ student.email }}</span>
                     </div>
-                    <a href="{{ path('app_mentor_student_details', {student: student.publicIdSimplify}) }}"
+                    <a href="{{ path('app_mentor_student_details', {publicIdSimplify: student.publicIdSimplify}) }}"
                        class="inline-block px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 transition">
                         Voir le profil
                     </a>

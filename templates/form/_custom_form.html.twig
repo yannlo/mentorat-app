@@ -1,0 +1,107 @@
+{% block time_period_row %}
+	<div>
+		<div class="flex flex-row items-center  gap-4 w-full">
+			<span>De</span>
+			{{ form_widget(form.start, {
+                "attr": {
+                    "class": "w-min"
+                }
+            }) }}
+			<span>à</span>
+			{{ form_widget(form.end, {
+                "attr": {
+                    "class": "w-min"
+                }
+            }) }}
+		</div>
+		{% if not form.vars.valid %}
+			<div class="text-red-600 text-sm mt-1">
+				{{ form_errors(form) }}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block day_row %}
+	<div>
+		<div class="w-full flex flex-col gap-4">
+			{{ form_row(form.name) }}
+			{{ form_row(form.periods) }}
+		</div>
+		{% if not form.vars.valid %}
+			<div class="text-red-600 text-sm mt-1">
+				{{ form_errors(form) }}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block periods_row %}
+	<div {{ stimulus_controller('form-collection') }} data-limit="3">
+		{{ form_label(form) }}
+		<div data-container class="flex flex-col gap-2">
+			{% for name, field in form %}
+				{% if name == "_token" %}
+					{{ form_row(field) }}
+				{% else %}
+					<div class="flex flex-row items-center justify-between">
+						{{ form_row(field) }}
+						{% if form.vars.allow_delete is defined and form.vars.allow_delete %}
+							<button type="button" data-action-remove class="border border-red-500 text-red-500 hover:bg-red-50 rounded px-3 py-1.5 text-sm h-min">Supprimer</button>
+						{% endif %}
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		{% if form.vars.allow_add is defined and form.vars.allow_add %}
+			<button type="button" data-action-add class="border border-blue-500 text-blue-500 hover:bg-blue-50 rounded px-3 py-1.5 text-sm ml-8 mt-6 disabled:opacity-50 disabled:cursor-not-allowed" {% if form.vars.disabled_add is defined and form.vars.disabled_add %} disabled {% endif %}>
+				Ajouter une période
+			</button>
+		{% endif %}
+		{% if form.vars.prototype is defined and form.vars.prototype %}
+			<template id="prototype">
+				{% include 'form/prototypes/_period.html.twig' with {form: form.vars.prototype, canBeDelete: form.vars.allow_delete is defined and form.vars.allow_delete } %}
+			</template>
+		{% endif %}
+
+	</div>
+{% endblock %}
+
+
+{% block available_days_row %}
+	<div {{ stimulus_controller('available-days-form') }} data-limit="7">
+		<div data-header class="flex flex-row justify-between items-end mb-4 px-8">
+			<div>
+				{{ form_label(form) }}
+			</div>
+			{% if form.vars.allow_add is defined and form.vars.allow_add %}
+				<button type="button" data-action-add class="border border-blue-500 text-blue-500 hover:bg-blue-50 rounded px-3 py-1.5 text-sm  disabled:opacity-50 disabled:cursor-not-allowed" {% if form.vars.disabled_add is defined and form.vars.disabled_add %} disabled {% endif %}>
+					Ajouter un jours
+				</button>
+			{% endif %}
+		</div>
+
+		<div data-container class="flex flex-col gap-8">
+			{% for name, field in form %}
+				{% if name == "_token" %}
+					{{ form_row(field) }}
+				{% else %}
+					<div class="flex flex-col gap-6  p-4 bg-slate-50 border border-slate-300 rounded-md">
+						{{ form_row(field) }}
+						<div class="w-full border-t-1 h-0 border-slate-300 "></div>
+						{% if form.vars.allow_delete is defined and form.vars.allow_delete %}
+							<button type="button" data-action-remove class="max-w-max w-full mx-auto border border-red-500 text-red-500 hover:bg-red-50 rounded px-3 py-1.5 text-sm h-min">Supprimer le jour</button>
+						{% endif %}
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+
+		{% if form.vars.prototype is defined and form.vars.prototype %}
+			<template id="prototype">
+				{% include 'form/prototypes/_day.html.twig' with {form: form.vars.prototype, canBeDelete: form.vars.allow_delete is defined and form.vars.allow_delete } %}
+			</template>
+		{% endif %}
+
+	</div>
+{% endblock %}
