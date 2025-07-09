@@ -19,6 +19,7 @@ class CertificateType extends AbstractType
         private readonly string $classname = Certificate::class,
     ) {
     }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -45,6 +46,7 @@ class CertificateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'validation_groups' => ['mentor:certificates'],
             'data_class' => Certificate::class,
         ]);
     }

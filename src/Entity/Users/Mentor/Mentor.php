@@ -2,6 +2,7 @@
 
 namespace App\Entity\Users\Mentor;
 
+use App\Validator as AppAssert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Users\BaseClientUser;
 use App\Entity\Enums\MentorRegisterStep;
@@ -49,20 +50,13 @@ class Mentor extends BaseClientUser
         min: 1,
         minMessage: 'You must specify at least one available day.',
         max: 7,
-        maxMessage: 'You must specify at 7 days maximum.',
-        groups: ["mentor:availables-price"]
-        
-    )]
-    #[Assert\Unique(
-        fields: ['name'],
-        message: 'Each available day must have a unique name.',
-        errorPath: 'availables',
-        groups: ["mentor:availables-price"]
-
+        maxMessage: 'You must specify at {{ limit }} days maximum.',
+        groups: ["mentor:availables-price"]    
     )]
     #[Assert\Valid(
         groups: ["mentor:availables-price"]
     )]
+    #[AppAssert\Availables(groups: ["mentor:availables-price"])]
     private Collection $availables;
 
     #[ORM\Column]
@@ -70,7 +64,7 @@ class Mentor extends BaseClientUser
         groups: ["mentor:availables-price"]
     )]
     #[Assert\Range(
-        min: 5000,
+        min: 1000,
         max: 50000,
         notInRangeMessage: 'The price must be between {{ min }}Fcfa and {{ max }}Fcfa.',
         groups: ["mentor:availables-price"]

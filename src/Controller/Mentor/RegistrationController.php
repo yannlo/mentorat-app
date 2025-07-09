@@ -67,6 +67,7 @@ final class RegistrationController extends AbstractController
             $entityManager->persist($mentor);
             $entityManager->flush();
 
+
             if ($mentor->getRegisterStep() === RegisterStep::COMPLETED) {
                 $this->addFlash(
                     'success',
@@ -82,10 +83,10 @@ final class RegistrationController extends AbstractController
                 'Étape "%s" complétée avec succès.',
                 $currentStep->getLabel()
             ));
-            
+
             return $this->redirectToRoute(
                 'app_mentor_register',
-                ["stepUri" => $mentor->getRegisterStep()->getUri()]
+                ["stepUri" => $currentStep->getNext()->getUri()]
             );
         }
 
@@ -95,7 +96,7 @@ final class RegistrationController extends AbstractController
             'form_steps' => [
                 "all" =>  array_slice(RegisterStep::all(), 0, -1),
                 "current" => $currentStep,
-                "mentor"=> $mentor->getRegisterStep()
+                "mentor" => $mentor->getRegisterStep()
             ]
         ]);
     }

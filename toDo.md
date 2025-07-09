@@ -3,10 +3,12 @@
 ## AvailaibleDays integration
 
 - [x] Commit je partial integration
-- [ ] completed the stimulus integrations
+- [x] completed 
+- [ ] Add a new step to select Course Type and Course Domain.
 
 
 ## Issue 
-- item for to collection form create dynamically dont print issue inside
-    Solution: Synchronise js and twig index
+- item for to collection form create dynamically dont print issue inside (Solved)
+- Bad registration process to save days in Available and Price form for mentor (Solved)
+
 

@@ -4,12 +4,12 @@ namespace App\Form\Types;
 
 use App\Entity\Users\Mentor\Day;
 use App\Entity\Enums\Day as EnumsDay;
+use App\Form\Types\Collections\PeriodCollectionType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class DayType extends AbstractType
 {
@@ -31,8 +31,9 @@ class DayType extends AbstractType
                 },
                 'label' => 'Selectionner un jour',
             ])
-            ->add('periods', PeriodsType::class, [
-                'label' => 'Ajouter vos periodes de disponiblilité du jour',
+            ->add('periods', PeriodCollectionType::class, [
+                'error_bubbling' => false,
+                'label' => 'Ajouter vos heures de disponiblilités.',
             ])
             ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimetamps(...))
         ;
@@ -41,6 +42,7 @@ class DayType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'validation_groups' => ['mentor:availables-price'],
             'data_class' => Day::class,
         ]);
     }

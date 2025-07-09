@@ -78,7 +78,7 @@ class AcademicStageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // 'validation_groups' => ['mentor:academic-stages'],
+            'validation_groups' => ['mentor:academic-stages'],
             'data_class' => AcademicStage::class,
         ]);
     }

@@ -10,6 +10,7 @@ use App\Entity\Utils\AbstractTimestamp;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\Users\Mentor\DayRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DayRepository::class)]
@@ -21,14 +22,24 @@ class Day extends AbstractTimestamp
     private ?int $id = null;
 
     #[ORM\Column(enumType: DayList::class)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ["mentor:availables-price"])]
     private ?DayList $name = null;
 
     /**
      * @var Collection<int, TimePeriod>
      */
-    #[ORM\OneToMany(targetEntity: TimePeriod::class, mappedBy: 'day', orphanRemoval: true, cascade:["persist"])]
-    #[AppAssert\Periods]
+    #[ORM\OneToMany(targetEntity: TimePeriod::class, mappedBy: 'day', orphanRemoval: true, cascade: ["persist"])]
+    #[Assert\Count(
+        groups: ["mentor:availables-price"],
+        min: 1,
+        minMessage: "Vous devez ajouter au moins une période.",
+        max: 3,
+        maxMessage: "Vous devez ajouter au plus {{ limit }} périodes."
+    )]
+    #[Assert\Valid(
+        groups: ["mentor:availables-price"]
+    )]
+    #[AppAssert\Periods(groups: ["mentor:availables-price"])]
     private Collection $periods;
 
     #[ORM\ManyToOne(inversedBy: 'availables')]
@@ -50,7 +61,7 @@ class Day extends AbstractTimestamp
         return $this->name;
     }
 
-    public function setName(DayList $name): static
+    public function setName(?DayList $name): static
     {
         $this->name = $name;
 

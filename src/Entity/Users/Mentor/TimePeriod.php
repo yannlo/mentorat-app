@@ -16,14 +16,27 @@ class TimePeriod extends AbstractTimestamp
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
-    #[Assert\Range(min: 7, max: 23)]
+    #[Assert\NotBlank(
+        groups: ["mentor:availables-price"]
+        )]
+    #[Assert\Range(
+        groups: ["mentor:availables-price"],
+        min: 7,
+        max: 23,
+        notInRangeMessage: "L'heure doit etre comprise en {{ min }}h et {{ max }}h.",
+
+    )]
     private ?int $start = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
-    #[Assert\Range(min: 7, max: 23)]
-    #[Assert\GreaterThan(propertyPath: "start")]
+    #[Assert\NotBlank(groups: ["mentor:availables-price"])]
+    #[Assert\Range(
+        groups: ["mentor:availables-price"],
+        min: 7,
+        max: 23,
+        notInRangeMessage: "L'heure doit etre comprise en {{ min }}h et {{ max }}h.",
+    )]
+    #[Assert\GreaterThan(groups: ["mentor:availables-price"], propertyPath: "start", message: "L'heure de fin doit etre suprérieur a l'heure de départ. ({{ compared_value }}h)")]
     private ?int $end = null;
 
     #[ORM\ManyToOne(inversedBy: 'periods')]

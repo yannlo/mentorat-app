@@ -20,12 +20,14 @@ class TimePeriodType extends AbstractType
     {
         $builder
             ->add('start', IntegerType::class, [
+                "label" => false,
                 'attr' => [
                     "min" => 7,
                     "max" => 23,
                 ],
             ])
             ->add('end', IntegerType::class, [
+                "label" => false,
                 'attr' => [
                     "min" => 7,
                     "max" => 23,
@@ -38,6 +40,7 @@ class TimePeriodType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'validation_groups' => ['mentor:availables-price'],
             'data_class' => TimePeriod::class,
         ]);
     }

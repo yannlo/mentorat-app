@@ -1,44 +1,38 @@
 <?php
+
 namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Doctrine\Common\Collections\Collection;
 
 class PeriodsValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint): void
     {
-        if (!is_array($value)) {
+
+        if (!($value instanceof Collection)) {
             return;
         }
 
-        if (count($value) <= 0) {
-            $this->context->buildViolation('Au moins une période doit etre enregistrer par jours.')
-                ->addViolation();
-            return;
-        }
+         $previousPeriod = null;
 
-        // 1. Vérifie qu'il n'y a pas plus de 3 périodes
-        if (count($value) > 3) {
-            $this->context->buildViolation('Vous ne pouvez pas avoir plus de 3 périodes.')
-                ->addViolation();
-            return;
-        }
+        foreach ($value as $index => $currentPeriod) {
+            // On suppose que Period a getStart() et getEnd() renvoyant DateTimeInterface
+            if ($previousPeriod !== null) {
+                $prevEnd   = $previousPeriod->getEnd();
+                $currStart = $currentPeriod->getStart();
 
-        // 2. Vérifie l'ordre des périodes
-        for ($i = 1; $i < count($value); $i++) {
-            $prev = $value[$i - 1];
-            $curr = $value[$i];
-
-            // On suppose que chaque période est un tableau ou objet avec 'end' et 'start'
-            $prevEnd = $prev['end'] ?? ($prev->end ?? null);
-            $currStart = $curr['start'] ?? ($curr->start ?? null);
-
-            if ($prevEnd && $currStart && $prevEnd > $currStart) {
-                $this->context->buildViolation('La date de fin d\'une période ne doit pas dépasser la date de début de la période suivante.')
-                    ->addViolation();
-                return;
+                if ($prevEnd && $currStart && $prevEnd > $currStart) {
+                    $this->context
+                         ->buildViolation('L\'heure de debut de l\'horaire #'.($index+1) . ' doit etre supérieur à l\'heure de fin de l\'horaire #' . ($index). '.')
+                         ->addViolation();
+                    return;
+                }
             }
+
+            $previousPeriod = $currentPeriod;
         }
+
     }
 }

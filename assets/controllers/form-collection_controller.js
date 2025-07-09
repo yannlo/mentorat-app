@@ -14,12 +14,7 @@ export default class extends Controller {
     /**
      * @var {HTMLElement} elementchildNodes
      */
-    this.count = this.element.querySelector("[data-container]")
-      ? Array.from(
-          this.element.querySelector("[data-container]").children
-        ).filter((child) => child.tagName === "DIV").length
-      : 0;
-    this.index = this.count + 1;
+
     this.limit = this.element.dataset.limit || null;
 
     const btns = Array.prototype.slice.call(
@@ -38,20 +33,33 @@ export default class extends Controller {
       elt.addEventListener("click", this.removeElement)
     );
   }
+
+  getForms = () => {
+    return this.element.querySelector("[data-container]")
+      ? Array.from(
+          this.element.querySelector("[data-container]").children
+        ).filter((child) => child.tagName === "DIV")
+      : null;
+  };
+
+  getCount = () => {
+    return this.getForms() ? this.getForms().length : 0;
+  };
+
   /**
    *
    * @param {MouseEvent} event
    */
   /**
    * Handles the addition of a new form element to a collection.
-   * 
+   *
    * - Prevents the default event behavior.
    * - Clones a prototype template, replacing `__name__` with the current index.
    * - Attaches a remove event listener to the new element.
    * - Animates the appearance of the new element.
    * - Increments the internal index and count.
    * - Disables the add button if a limit is reached.
-   * 
+   *
    * @param {Event} event - The event triggered by the add action.
    * @returns {Element|undefined} The newly added element, or undefined if not added.
    */
@@ -71,7 +79,7 @@ export default class extends Controller {
     const element = document
       .createRange()
       .createContextualFragment(
-        prototype?.innerHTML.replaceAll("__name__", this.index)
+        prototype?.innerHTML.replaceAll("__name__", this.getCount())
       ).firstElementChild;
 
     element
@@ -86,9 +94,6 @@ export default class extends Controller {
 
     this.element.querySelector("[data-container]")?.appendChild(element);
 
-    this.index++;
-    this.count++;
-
     // Make new element visible, then animate
     this.makeNewEltVisible(element);
 
@@ -102,13 +107,12 @@ export default class extends Controller {
       }, 400);
     }, 50);
 
-    if (this.limit !== null && this.count >= this.limit) {
+    if (this.limit !== null && this.getCount() >= this.limit) {
       event.currentTarget.setAttribute("disabled", "true");
       return;
     }
     return element;
   };
-
   /**
    *
    * @param {MouseEvent} event
@@ -116,27 +120,50 @@ export default class extends Controller {
   removeElement = (event) => {
     event.preventDefault();
 
-    if (this.count == 0) {
+    if (this.getCount() == 0) {
       return;
     }
 
     const elt = event.currentTarget.parentElement;
-    console.log(elt, this.element);
+
+    const deleteProcess = () => {
+      elt.remove();
+
+      this.getForms().forEach((form, index) => {
+        const fields = Array.from(
+          form.querySelectorAll("input, select, textarea")
+        );
+
+        fields.forEach((f) => {
+          const curentId = f.getAttribute("id");
+          const curentName = f.getAttribute("name");
+
+          const newId = curentId.replaceAll(
+            /([A-Za-z]+)\_\d+\_([A-Za-z]+)$/g,
+            `$1_${index}_$2`
+          );
+          const newName = curentName.replaceAll(
+            /(\[[A-Za-z]+\])\[\d+\](\[[A-Za-z]+\])$/g,
+            `$1[${index}]$2`
+          );
+          f.setAttribute("id", newId);
+          f.setAttribute("name", newName);
+
+          form.querySelector(`label[for="${curentId}"]`)?.setAttribute("for", newId);
+        });
+
+        if (this.limit !== null && this.getCount() < this.limit) {
+          this.btnAdd.removeAttribute("disabled");
+        }
+      });
+    };
 
     // Animate removal
     elt.style.transition =
       "opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1)";
     elt.style.opacity = "0";
     elt.style.transform = "scale(0.97)";
-    setTimeout(() => {
-      elt.remove();
-    }, 350);
-
-    this.count--;
-
-    if (this.limit !== null && this.count < this.limit) {
-      this.btnAdd.removeAttribute("disabled");
-    }
+    setTimeout(deleteProcess, 350);
   };
 
   /**
