@@ -19,17 +19,22 @@
 	<div class="mb-4">
 		{{ form_row(form.email) }}
 	</div>
-	<div class="mb-4">
-		{{ form_row(form.plainPassword) }}
-	</div>
+	{% if not app.user %}
+		<div class="mb-4">
+			{{ form_row(form.plainPassword) }}
+		</div>
+	{% endif %}
 </div>
 
-{{ form_widget(form.agreeTerms) }}
+
+{% if not app.user %}
+	{{ form_widget(form.agreeTerms) }}
+{% endif %}
 
 
 <div class="mt-10 mx-auto w-min">
 	<button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600">
-		Confirm
+		Suivant
 	</button>
 </div>
 {{ form_rest(form) }}

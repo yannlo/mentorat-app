@@ -3,6 +3,7 @@
 namespace App\Form\Users\Mentor;
 
 use App\Entity\Users\Mentor\Mentor;
+use App\Form\Types\AvailableDaysType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,8 +16,7 @@ class AvailableAndPriceForm extends AbstractType
 
     public function __construct(
         private readonly string $classname = Mentor::class,
-    ) {
-    }
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -36,7 +36,13 @@ class AvailableAndPriceForm extends AbstractType
                     'autocomplete' => 'off',
                 ],
                 'help' => 'Indiquez votre tarif horaire en F CFA. Exemple : 15000',
-                ])  
+            ])
+            ->add("availables", AvailableDaysType::class, [
+                "label" => "Lister vos jours et heure de diponibilité",
+                "label_attr" => [
+                    "class" => "text-lg font-semibold"
+                ]
+            ])
             ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimetamps(...))
         ;
     }
@@ -44,6 +50,7 @@ class AvailableAndPriceForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'validation_groups' => ['mentor:availables-price'],
             'data_class' => Mentor::class,
         ]);
     }

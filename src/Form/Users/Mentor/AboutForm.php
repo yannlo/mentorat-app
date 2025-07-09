@@ -3,9 +3,6 @@
 namespace App\Form\Users\Mentor;
 
 use App\Entity\Users\Mentor\Mentor;
-use App\Form\Types\CertificateType;
-use App\Form\Types\AcademicStageType;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class AboutForm extends AbstractType
 {
@@ -27,8 +23,7 @@ class AboutForm extends AbstractType
 
     public function __construct(
         private readonly string $classname = Mentor::class,
-    ) {
-    }
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -47,54 +42,63 @@ class AboutForm extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Enter your email address',
+                "disabled" => $options["is_connected"],
                 'attr' => [
                     'placeholder' => 'Email Address',
-                    'autocomplete' => 'email'
+                    "class" => "disabled:bg-gray-200"
                 ],
+            ])
 
-            ])
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'mapped' => false,
-                'attr' => [
-                    'autocomplete' => 'new-password'
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please confirm your password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-                'first_options'  => [
-                    'label' => 'Enter your password',
-                    'attr' => [
-                        'placeholder' => 'Password',
-                        'autocomplete' => 'new-password'
-                    ],
-                    'hash_property_path' => 'password'
-                ],
-                'second_options' => [
-                    'label' => 'Confirm your password',
-                    'attr' => [
-                        'placeholder' => 'Confirm Password',
-                        'autocomplete' => 'new-password'
-                    ],
-                ],
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'label' => 'I agree to the terms',
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+            // Only add 'agreeTerms' if user is not connected
+            ->addEventListener(FormEvents::PRE_SET_DATA, function ($event) {
+                $form = $event->getForm();
+                // Assuming you inject the security service and pass 'is_connected' as an option
+                if (!$form->getConfig()->getOption('is_connected')) {
+                    $form
+                        ->add('agreeTerms', CheckboxType::class, [
+                            'mapped' => false,
+                            'label' => 'I agree to the terms',
+                            'constraints' => [
+                                new IsTrue([
+                                    'message' => 'You should agree to our terms.',
+                                ]),
+                            ],
+                        ])
+                        ->add('plainPassword', RepeatedType::class, [
+                            'type' => PasswordType::class,
+                            'mapped' => false,
+                            'attr' => [
+                                'autocomplete' => 'new-password'
+                            ],
+                            'constraints' => [
+                                new NotBlank([
+                                    'message' => 'Please confirm your password',
+                                ]),
+                                new Length([
+                                    'min' => 6,
+                                    'minMessage' => 'Your password should be at least {{ limit }} characters',
+                                    // max length allowed by Symfony for security reasons
+                                    'max' => 4096,
+                                ]),
+                            ],
+                            'first_options'  => [
+                                'label' => 'Enter your password',
+                                'attr' => [
+                                    'placeholder' => 'Password',
+                                    'autocomplete' => 'new-password'
+                                ],
+                                'hash_property_path' => 'password'
+                            ],
+                            'second_options' => [
+                                'label' => 'Confirm your password',
+                                'attr' => [
+                                    'placeholder' => 'Confirm Password',
+                                    'autocomplete' => 'new-password'
+                                ],
+                            ],
+                        ]);
+                }
+            })
 
             ->addEventListener(FormEvents::POST_SUBMIT, $this->attachTimetamps(...))
         ;
@@ -104,6 +108,7 @@ class AboutForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Mentor::class,
+            'is_connected' => false
         ]);
     }
 }

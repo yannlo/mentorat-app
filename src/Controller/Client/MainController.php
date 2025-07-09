@@ -18,18 +18,10 @@ final class MainController extends AbstractController
     #[Route('/dashboard', name: 'dashboard')]
     public function dashboard(Request $request, StudentRepository $studentRepository): Response
     {
-        $user = $request->getUser();
-        if (
-            ($user instanceof Mentor)
-            && $user->getRegisterStep() !== MentorRegisterStep::COMPLETED
-        ) {
-            return $this->redirectToRoute('app_mentor_register', ["step" => $user->getRegisterStep()->getNext()->value]);
-        }
 
         if ($this->isGranted('ROLE_STUDENT')) {
             return $this->render('student/main/index.html.twig', []);
         }
-
 
         return $this->render('mentor/main/dashboard.html.twig', [
             "students" => $studentRepository->findAll()

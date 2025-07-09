@@ -49,6 +49,7 @@ Encore
         usePolling: true,
       },
     };
+
     options.client = {
       overlay: true,
     };

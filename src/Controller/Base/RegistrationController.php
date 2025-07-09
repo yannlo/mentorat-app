@@ -39,7 +39,7 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
 
-        if (!is_null($request->getUser())) {
+        if ($this->isGranted('ROLE_USER')) {
             return new RedirectResponse(
                 $this->generateUrl('app_client_dashboard')
             );
@@ -82,7 +82,7 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
 
-        if (!is_null($request->getUser())) {
+        if ($this->isGranted('ROLE_USER')) {
             return new RedirectResponse(
                 $this->generateUrl('app_client_dashboard')
             );

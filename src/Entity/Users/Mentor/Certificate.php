@@ -18,24 +18,37 @@ class Certificate extends AbstractTimestamp
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Certificate name cannot be blank')]
+    #[Assert\NotBlank(
+        groups:["mentor:certificates"],
+        message: 'Certificate name cannot be blank')]
     #[Assert\Length(
+        groups:["mentor:certificates"],
+        min: 3,
+        minMessage: 'Certificate name cannot be short than {{ limit }} characters',
         max: 255,
         maxMessage: 'Certificate name cannot be longer than {{ limit }} characters'
     )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    #[Assert\NotBlank(message: 'Issue date cannot be blank')]
+    #[Assert\NotBlank(
+        groups:["mentor:certificates"],
+        message: 'Issue date cannot be blank')]
     #[Assert\LessThanOrEqual(
+        groups:["mentor:certificates"],
         value: 'today',
         message: 'Issue date cannot be in the future.'
     )]
     private ?\DateTimeImmutable $issueDate = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Issuer cannot be blank')]
+    #[Assert\NotBlank(
+        groups:["mentor:certificates"],
+        message: 'Issuer cannot be blank')]
     #[Assert\Length(
+        groups:["mentor:certificates"],
+        min: 3,
+        minMessage: 'Issuer name cannot be short than {{ limit }} characters',
         max: 255,
         maxMessage: 'Issuer name cannot be longer than {{ limit }} characters'
     )]
@@ -43,6 +56,9 @@ class Certificate extends AbstractTimestamp
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(
+        groups:["mentor:certificates"],
+        min: 3,
+        minMessage: 'Description cannot be short than {{ limit }} characters',
         max: 1000,
         maxMessage: 'Description cannot be longer than {{ limit }} characters'
     )]

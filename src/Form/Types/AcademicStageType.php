@@ -41,6 +41,8 @@ class AcademicStageType extends AbstractType
 
             ->add('endYear', IntegerType::class, [
                 'label' => 'Select the end year',
+                "help" => "Leave empty if you are not done yet.",
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'XXXX',
                     "min" => 1900,
@@ -76,6 +78,7 @@ class AcademicStageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            // 'validation_groups' => ['mentor:academic-stages'],
             'data_class' => AcademicStage::class,
         ]);
     }

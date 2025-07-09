@@ -17,12 +17,16 @@
 {% endif %}
 
 <div class="mb-8">
-	{{ form_row(form.certificates) }}
+	{{ form_row(form.price) }}
+</div>
+
+<div class="mb-8">
+	{{ form_row(form.availables) }}
 </div>
 
 <div class="mt-10 mx-auto w-min">
 	<button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600">
-		Suivant
+		Terminer
 	</button>
 </div>
 {{ form_rest(form) }}

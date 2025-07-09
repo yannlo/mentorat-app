@@ -50,7 +50,7 @@ class MentorRegisterStepMiddleware implements EventSubscriberInterface
         if ($user->getRegisterStep() !== MentorRegisterStep::COMPLETED) {
             // Redirige luser->getRegisterStep()'utilisateur vers une page indiquant que son compte n'est pas actif.
             $url = $this->router->generate('app_mentor_register',[
-                "step" => $user->getRegisterStep()->getNext()->value
+                "stepUri" => $user->getRegisterStep()->getUri()
             ]);
             $response = new RedirectResponse($url);
             $event->setResponse($response);

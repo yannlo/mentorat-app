@@ -21,41 +21,59 @@ class Mentor extends BaseClientUser
      * @var Collection<int, Certificate>
      */
     #[ORM\OneToMany(targetEntity: Certificate::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ['persist'])]
-    #[Assert\Valid]
+    #[Assert\Valid(groups:["mentor:certificates"])]
     private Collection $certificates;
 
     #[ORM\Column(enumType: MentorRegisterStep::class)]
-    private MentorRegisterStep $registerStep = MentorRegisterStep::ABOUT_STEP;
+    private MentorRegisterStep $registerStep = MentorRegisterStep::EDUCATION_STEP;
 
     /**
      * @var Collection<int, AcademicStage>
      */
-    #[ORM\OneToMany(targetEntity: AcademicStage::class, mappedBy: 'mentor', orphanRemoval: true, cascade:["persist"])]
+    #[ORM\OneToMany(targetEntity: AcademicStage::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ["persist"])]
+    #[Assert\Count(
+        min: 1,
+        minMessage: 'You must specify at least one available day.',
+        groups:["mentor:academic-stages"]
+    )]
+    #[Assert\Valid(
+        groups:["mentor:academic-stages"]
+        )]
     private Collection $academicStages;
 
     /**
      * @var Collection<int, Day>
      */
-    #[ORM\OneToMany(targetEntity: Day::class, mappedBy: 'mentor', orphanRemoval: true, cascade:["persist"])]
+    #[ORM\OneToMany(targetEntity: Day::class, mappedBy: 'mentor', orphanRemoval: true, cascade: ["persist"])]
     #[Assert\Count(
         min: 1,
         minMessage: 'You must specify at least one available day.',
         max: 7,
         maxMessage: 'You must specify at 7 days maximum.',
+        groups: ["mentor:availables-price"]
+        
     )]
     #[Assert\Unique(
         fields: ['name'],
         message: 'Each available day must have a unique name.',
-        errorPath: 'availables'
+        errorPath: 'availables',
+        groups: ["mentor:availables-price"]
+
+    )]
+    #[Assert\Valid(
+        groups: ["mentor:availables-price"]
     )]
     private Collection $availables;
 
     #[ORM\Column]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(
+        groups: ["mentor:availables-price"]
+    )]
     #[Assert\Range(
         min: 5000,
         max: 50000,
-        notInRangeMessage: 'The price must be between {{ min }} and {{ max }}.'
+        notInRangeMessage: 'The price must be between {{ min }}Fcfa and {{ max }}Fcfa.',
+        groups: ["mentor:availables-price"]
     )]
     private ?int $price = null;
 

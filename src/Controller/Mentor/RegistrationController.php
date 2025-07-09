@@ -3,13 +3,12 @@
 namespace App\Controller\Mentor;
 
 use App\Entity\Users\Mentor\Mentor;
-use App\Form\Users\MentorType;
-use App\Entity\Enums\MentorRegisterStep;
+use App\Entity\Enums\MentorRegisterStep as RegisterStep;
+use App\Form\Users\Mentor\AboutForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -17,11 +16,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class RegistrationController extends AbstractController
 {
     #[Route(
-        '/register-mentor/{step}',
+        '/register-mentor/{stepUri}',
         name: 'app_mentor_register',
+        requirements: [
+            "stepUri" => "[a-z\-]+"
+        ]
     )]
     public function index(
-        string $step,
+        string $stepUri,
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
@@ -29,51 +31,43 @@ final class RegistrationController extends AbstractController
         /** @var Mentor $mentor */
         $mentor = $this->getUser();
 
-        if ($mentor->getRegisterStep() === MentorRegisterStep::COMPLETED) {
-            return $this->redirectToRoute('app_client_dashboard');
+        try {
+            $currentStep = RegisterStep::getStepByUri($stepUri);
+        } catch (\InvalidArgumentException) {
+            throw $this->createNotFoundException('Étape d\'inscription inconnue.');
         }
 
-        $currentStep = MentorRegisterStep::tryFrom($step);
-        if (!$currentStep) {
-            throw $this->createNotFoundException('Étape de registre mentor inconnue.');
+        if ($currentStep->getOrder() > $mentor->getRegisterStep()->getOrder()) {
+            return $this->redirectToRoute(
+                'app_mentor_register',
+                ["stepUri" => $mentor->getRegisterStep()->getUri()]
+            );
         }
 
-        $steps = $this->generateSteps($mentor, $currentStep);
+        $formClass = $currentStep->getFormClass();
 
+        $form = $this->createForm(
+            type: $formClass,
+            data: $mentor,
+            options: $formClass ===  AboutForm::class ? [
+                "is_connected" => (bool) $this->getUser()
+            ] : []
+        );
 
-        $formClass = "App\Form\Users\Mentor\\" . ucfirst(
-            str_replace("Step", "", $step)
-        ) . "Form";
-
-        $template = "mentor/form/_"
-            . str_replace("Step", "", $step)
-            .".html.twig"
-       ;
-        if (!class_exists($formClass)) {
-            return $this->redirectToRoute('app_mentor_register', ["step" => $mentor->getRegisterStep()->getNext()->value]);
-        }
-
-
-        $form = $this->createForm($formClass, $mentor);
         $form->handleRequest($request);
 
-        // Ensure the mentor's register step matches the current step in the URL
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $currentStep = $mentor->getRegisterStep();
             $nextStep = $currentStep->getNext();
-
-
-            if (!is_null($nextStep) && $currentStep -> getOrder() > $mentor->getRegisterStep()->getOrder()) {
+            if ($nextStep->getOrder() > $mentor->getRegisterStep()->getOrder()) {
                 $mentor->setRegisterStep(
                     $nextStep
                 );
             }
-
             $entityManager->persist($mentor);
             $entityManager->flush();
 
-            if (!is_null($nextStep)) {
+            if ($mentor->getRegisterStep() === RegisterStep::COMPLETED) {
                 $this->addFlash(
                     'success',
                     sprintf(
@@ -81,7 +75,6 @@ final class RegistrationController extends AbstractController
                         $currentStep->getLabel()
                     )
                 );
-
                 return $this->redirectToRoute('app_client_dashboard');
             }
 
@@ -89,32 +82,36 @@ final class RegistrationController extends AbstractController
                 'Étape "%s" complétée avec succès.',
                 $currentStep->getLabel()
             ));
-
+            
             return $this->redirectToRoute(
                 'app_mentor_register',
-                ["step" => $mentor->getRegisterStep()->value]
+                ["stepUri" => $mentor->getRegisterStep()->getUri()]
             );
         }
 
         return $this->render('mentor/registration/index.html.twig', [
             'form' => $form,
-            'form_template' => $template,
-            'form_steps' => $steps
+            'form_template' => $currentStep->getTemplate(),
+            'form_steps' => [
+                "all" =>  array_slice(RegisterStep::all(), 0, -1),
+                "current" => $currentStep,
+                "mentor"=> $mentor->getRegisterStep()
+            ]
         ]);
     }
 
 
-    private function generateSteps(Mentor $mentor, MentorRegisterStep $pageStep ): array
+    private function generateSteps(Mentor $mentor, RegisterStep $pageStep): array
     {
         $steps = [];
-        foreach (MentorRegisterStep::all() as $step) {
+        foreach (RegisterStep::all() as $step) {
             $isDone = $mentor->getRegisterStep()->getOrder()  >= $step->getOrder();
             $steps[] = [
                 "label" => $step->getLabel(),
-                "value" =>$step->value,
+                "value" => $step->value,
                 "done" => $isDone,
                 "current" => $pageStep->getOrder() == $step->getOrder(),
-                "afterCurrent" => $step->getOrder() > $pageStep->getOrder() ,
+                "afterCurrent" => $step->getOrder() > $pageStep->getOrder(),
                 "last" => false
             ];
         }

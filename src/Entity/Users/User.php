@@ -53,6 +53,8 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'First name cannot be blank')]
     #[Assert\Length(
+        min: 3,
+        minMessage: 'First name must be at least {{ limit }} characters long',
         max: 255,
         maxMessage: 'First name cannot be longer than {{ limit }} characters'
     )]
@@ -61,6 +63,8 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Last name cannot be blank')]
     #[Assert\Length(
+        min: 3,
+        minMessage: 'Last name must be at least {{ limit }} characters long',
         max: 255,
         maxMessage: 'Last name cannot be longer than {{ limit }} characters'
     )]
@@ -180,7 +184,7 @@ class User extends AbstractTimestamp implements UserInterface, PasswordAuthentic
 
     public function getFullname(): string
     {
-        return ( $this->lastname . ' ' . $this->firstname);
+        return ($this->lastname . ' ' . $this->firstname);
     }
 
     public function getBirthdate(): ?\DateTimeImmutable
